@@ -31,10 +31,12 @@ app.use(
     origin: (origin, callback) => {
       const clientUrl = (process.env.CLIENT_URL || "http://localhost:5173").replace(/\/$/, '');
       // Allow requests from the configured client URL (with or without trailing slash)
-      if (!origin || origin.replace(/\/$/, '') === clientUrl || origin === clientUrl) {
-        callback(null, true);
+      const normalizedOrigin = origin ? origin.replace(/\/$/, '') : null;
+      if (!origin || normalizedOrigin === clientUrl) {
+        // Echo back the exact origin that was sent to avoid CORS mismatch
+        callback(null, origin || true);
       } else {
-        callback(null, true); // Allow all origins for now, but log them
+        callback(null, true); // Allow all origins for now
       }
     }
   })
