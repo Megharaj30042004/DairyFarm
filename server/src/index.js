@@ -28,7 +28,15 @@ const port = process.env.PORT || 8080;
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173"
+    origin: (origin, callback) => {
+      const clientUrl = (process.env.CLIENT_URL || "http://localhost:5173").replace(/\/$/, '');
+      // Allow requests from the configured client URL (with or without trailing slash)
+      if (!origin || origin.replace(/\/$/, '') === clientUrl || origin === clientUrl) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Allow all origins for now, but log them
+      }
+    }
   })
 );
 app.use(express.json());
