@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply m-0 min-h-screen bg-ink font-sans text-white antialiased;
+  background-image:
+    radial-gradient(circle at top, rgba(234, 198, 117, 0.12), transparent 22%),
+    linear-gradient(180deg, #08111f 0%, #0f1d24 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.glass-panel {
+  @apply border border-white/15 bg-white/10 shadow-glass backdrop-blur-2xl;
+}
+
+.section-shell {
+  @apply glass-panel rounded-[2rem] p-6 md:p-8;
+}
+
+.field {
+  @apply w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 outline-none transition focus:border-ambermilk/70 focus:bg-white/15;
+}
+
+.field-label {
+  @apply mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-white/70;
+}
+
+.primary-button {
+  @apply inline-flex items-center justify-center rounded-2xl bg-ambermilk px-5 py-3 text-sm font-bold text-ink transition hover:brightness-105;
+}
+
+.ghost-button {
+  @apply inline-flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15;
+}
+
+.page-title {
+  @apply font-display text-3xl text-white md:text-5xl;
+}
+
+.page-copy {
+  @apply max-w-2xl text-sm leading-7 text-white/70 md:text-base;
+}
+
+.sub-card {
+  @apply rounded-[1.75rem] border border-white/10 bg-white/5 p-5;
+}
