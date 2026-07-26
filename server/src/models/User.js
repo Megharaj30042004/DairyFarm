@@ -6,7 +6,9 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, trim: true },
     passwordHash: { type: String, required: true },
     mobileNumber: { type: String, trim: true },
-    village: { type: String, trim: true }
+    village: { type: String, trim: true },
+    dailyChatCount: { type: Number, default: 0 },
+    lastChatDate: { type: String, default: "" }
   },
   {
     timestamps: true,

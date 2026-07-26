@@ -8,10 +8,11 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  @apply m-0 min-h-screen bg-ink font-sans text-white antialiased;
+  @apply m-0 min-h-screen bg-ink font-sans text-white antialiased selection:bg-ambermilk selection:text-ink;
   background-image:
     radial-gradient(circle at top, rgba(234, 198, 117, 0.12), transparent 22%),
     linear-gradient(180deg, #08111f 0%, #0f1d24 100%);
@@ -26,33 +27,44 @@ body {
 }
 
 .section-shell {
-  @apply glass-panel rounded-[2rem] p-6 md:p-8;
+  @apply glass-panel rounded-[1.5rem] p-4 sm:rounded-[2rem] sm:p-6 md:p-8;
 }
 
+/* 16px text-base on mobile prevents iOS Safari auto-zoom on input focus */
 .field {
-  @apply w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 outline-none transition focus:border-ambermilk/70 focus:bg-white/15;
+  @apply min-h-[48px] w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-base text-white placeholder:text-white/50 outline-none transition focus:border-ambermilk/70 focus:bg-white/15 sm:text-sm;
 }
 
 .field-label {
-  @apply mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-white/70;
+  @apply mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70;
 }
 
 .primary-button {
-  @apply inline-flex items-center justify-center rounded-2xl bg-ambermilk px-5 py-3 text-sm font-bold text-ink transition hover:brightness-105;
+  @apply inline-flex min-h-[48px] items-center justify-center rounded-2xl bg-ambermilk px-5 py-3 text-sm font-bold text-ink transition active:scale-[0.98] hover:brightness-105 disabled:opacity-50;
 }
 
 .ghost-button {
-  @apply inline-flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15;
+  @apply inline-flex min-h-[48px] items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition active:scale-[0.98] hover:bg-white/15 disabled:opacity-50;
 }
 
 .page-title {
-  @apply font-display text-3xl text-white md:text-5xl;
+  @apply font-display text-2xl text-white sm:text-3xl md:text-5xl;
 }
 
 .page-copy {
-  @apply max-w-2xl text-sm leading-7 text-white/70 md:text-base;
+  @apply max-w-2xl text-xs leading-6 text-white/70 sm:text-sm sm:leading-7 md:text-base;
 }
 
 .sub-card {
-  @apply rounded-[1.75rem] border border-white/10 bg-white/5 p-5;
+  @apply rounded-[1.25rem] border border-white/10 bg-white/5 p-4 sm:rounded-[1.75rem] sm:p-5;
 }
+
+/* Hide scrollbar for smooth mobile horizontal nav scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

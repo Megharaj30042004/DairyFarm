@@ -11,13 +11,38 @@ export default function BuffaloPage({
   const [status, setStatus] = useState("");
 
   const handleSave = async () => {
+    setStatus("");
+    const plannedCount = Number(herdSetup.buffaloesCount || 0);
+    if (plannedCount === 0) {
+      const msg = "Validation Failed: No buffaloes planned in Herd Setup. Please configure setup first.";
+      setStatus(msg);
+      throw new Error(msg);
+    }
+
+    const activeBuffaloes = buffaloes.slice(0, plannedCount);
+    for (let i = 0; i < activeBuffaloes.length; i++) {
+      const animal = activeBuffaloes[i];
+      if (!animal.nameTagId || !animal.nameTagId.trim()) {
+        const msg = `Validation Failed: Please enter Name/Tag ID for Buffalo ${i + 1}.`;
+        setStatus(msg);
+        throw new Error(msg);
+      }
+      if (animal.milkYieldPerDay === "" || isNaN(Number(animal.milkYieldPerDay)) || Number(animal.milkYieldPerDay) < 0) {
+        const msg = `Validation Failed: Please enter a valid Milk Yield (L/day) for Buffalo ${i + 1}.`;
+        setStatus(msg);
+        throw new Error(msg);
+      }
+    }
+
     try {
       await onSave();
-      setStatus("Buffalo records saved.");
+      setStatus("Buffalo records saved successfully.");
     } catch (error) {
-      setStatus(error.message);
+      setStatus(error.message || "Failed to save buffalo records.");
+      throw error;
     }
   };
+
 
   return (
     <div>

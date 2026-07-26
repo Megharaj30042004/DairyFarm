@@ -1,6 +1,9 @@
 import dotenv from "dotenv";
 import cors from "cors";
 import express from "express";
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -26,22 +29,50 @@ dotenv.config({ path: serverEnvPath, override: false });
 const app = express();
 const port = process.env.PORT || 8080;
 
+// Security HTTP Headers
+app.use(helmet({ crossOriginResourcePolicy: false }));
+
+// Parse cookies
+app.use(cookieParser());
+
+// Rate Limiter for Login/Register (Prevents Brute-force attacks)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 15, // Limit each IP to 15 login/register requests per windowMs
+  message: { message: "Too many login/register attempts. Please try again after 15 minutes." },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// General API Rate Limiter (Prevents DDoS/Spam)
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 300, // Limit each IP to 300 requests per 15 minutes
+  message: { message: "Too many requests. Please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
 app.use(
   cors({
     origin: (origin, callback) => {
       const clientUrl = (process.env.CLIENT_URL || "http://localhost:5173").replace(/\/$/, '');
-      // Allow requests from the configured client URL (with or without trailing slash)
       const normalizedOrigin = origin ? origin.replace(/\/$/, '') : null;
       if (!origin || normalizedOrigin === clientUrl) {
-        // Echo back the exact origin that was sent to avoid CORS mismatch
         callback(null, origin || true);
       } else {
-        callback(null, true); // Allow all origins for now
+        callback(null, true);
       }
-    }
+    },
+    credentials: true
   })
 );
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
+app.use("/api/", generalLimiter);
+app.use("/api/auth/login", authLimiter);
+app.use("/api/auth/register", authLimiter);
 
 app.get("/api/health", (_request, response) => {
   response.json({

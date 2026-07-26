@@ -15,13 +15,35 @@ export default function SetupPage({ herdSetup, setHerdSetup, stats, onSave }) {
   };
 
   const handleSave = async () => {
+    setStatus("");
+    const cows = Number(herdSetup.cowsCount);
+    const buff = Number(herdSetup.buffaloesCount);
+
+    if (herdSetup.cowsCount === "" || isNaN(cows) || cows < 0) {
+      const msg = "Validation Failed: Please enter a valid non-negative number for Cows.";
+      setStatus(msg);
+      throw new Error(msg);
+    }
+    if (herdSetup.buffaloesCount === "" || isNaN(buff) || buff < 0) {
+      const msg = "Validation Failed: Please enter a valid non-negative number for Buffaloes.";
+      setStatus(msg);
+      throw new Error(msg);
+    }
+    if (cows === 0 && buff === 0) {
+      const msg = "Validation Failed: Please enter at least 1 Cow or 1 Buffalo in herd setup.";
+      setStatus(msg);
+      throw new Error(msg);
+    }
+
     try {
       await onSave();
       setStatus("Farm setup saved successfully.");
     } catch (error) {
-      setStatus(error.message);
+      setStatus(error.message || "Failed to save farm setup.");
+      throw error;
     }
   };
+
 
   return (
     <div>

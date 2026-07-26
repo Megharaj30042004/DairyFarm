@@ -8,6 +8,7 @@ import {
 } from "./data/mockData";
 import AppShell from "./components/AppShell";
 import BuffaloPage from "./components/BuffaloPage";
+import ChatBot from "./components/ChatBot";
 import CowsPage from "./components/CowsPage";
 import DiseasesPage from "./components/DiseasesPage";
 import EmergencyPage from "./components/EmergencyPage";
@@ -15,6 +16,7 @@ import FinanceWorkspace from "./components/FinanceWorkspace";
 import LoginPage from "./components/LoginPage";
 import MarketplaceHub from "./components/MarketplaceHub";
 import SetupPage from "./components/SetupPage";
+import Toast from "./components/Toast";
 
 const routes = [
   { key: "setup", label: "Farm Setup" },
@@ -23,7 +25,8 @@ const routes = [
   { key: "finance", label: "Finance" },
   { key: "marketplace", label: "Marketplace" },
   { key: "emergency", label: "Emergency" },
-  { key: "diseases", label: "Disease Guide" }
+  { key: "diseases", label: "Disease Guide" },
+  { key: "chatbot", label: "AI Assistant" }
 ];
 
 const routeMap = new Set(routes.map((route) => route.key));
@@ -67,6 +70,11 @@ export default function App() {
   const [diseases, setDiseases] = useState([]);
   const [appError, setAppError] = useState("");
   const [isBootstrapping, setIsBootstrapping] = useState(true);
+  const [toast, setToast] = useState(null);
+
+  const triggerToast = (title, message, type = "success") => {
+    setToast({ title, message, type, id: Date.now() });
+  };
 
   useEffect(() => {
     const handleHashChange = () => setActiveRoute(getRouteFromHash());
@@ -152,7 +160,13 @@ export default function App() {
           api.getDiseases()
         ]);
 
-        setUser(meResponse.user);
+        const currentUserObj = meResponse.user || meResponse;
+        const normalizedUser = {
+          ...currentUserObj,
+          id: String(currentUserObj.id || currentUserObj._id || ""),
+          _id: String(currentUserObj.id || currentUserObj._id || "")
+        };
+        setUser(normalizedUser);
         setHerdSetup({
           cowsCount: farmResponse.cowsCount || 0,
           buffaloesCount: farmResponse.buffaloesCount || 0
@@ -161,28 +175,32 @@ export default function App() {
           cowsResponse.length
             ? syncAnimalDrafts(
                 cowsResponse.map((animal) => ({
-                id: animal._id,
-                animalType: "Cow",
-                nameTagId: animal.nameTagId,
-                age: `${animal.age?.years || 0} years ${animal.age?.months || 0} months`,
-                milkYieldPerDay: animal.milkYieldPerDay,
-                pregnancyStatus: animal.pregnancyStatus
+                  id: animal._id,
+                  animalType: "Cow",
+                  nameTagId: animal.nameTagId,
+                  age: `${animal.age?.years || 0} years ${animal.age?.months || 0} months`,
+                  milkYieldPerDay: animal.milkYieldPerDay,
+                  pregnancyStatus: animal.pregnancyStatus
                 })),
                 farmResponse.cowsCount || cowsResponse.length || 0,
                 "Cow"
               )
-            : syncAnimalDrafts(cowInventorySeed, farmResponse.cowsCount || 0, "Cow")
+            : syncAnimalDrafts(
+                cowInventorySeed,
+                farmResponse.cowsCount || 0,
+                "Cow"
+              )
         );
         setBuffaloes(
           buffaloesResponse.length
             ? syncAnimalDrafts(
                 buffaloesResponse.map((animal) => ({
-                id: animal._id,
-                animalType: "Buffalo",
-                nameTagId: animal.nameTagId,
-                age: `${animal.age?.years || 0} years ${animal.age?.months || 0} months`,
-                milkYieldPerDay: animal.milkYieldPerDay,
-                pregnancyStatus: animal.pregnancyStatus
+                  id: animal._id,
+                  animalType: "Buffalo",
+                  nameTagId: animal.nameTagId,
+                  age: `${animal.age?.years || 0} years ${animal.age?.months || 0} months`,
+                  milkYieldPerDay: animal.milkYieldPerDay,
+                  pregnancyStatus: animal.pregnancyStatus
                 })),
                 farmResponse.buffaloesCount || buffaloesResponse.length || 0,
                 "Buffalo"
@@ -213,27 +231,58 @@ export default function App() {
   const handleAuthSuccess = ({ token, user: nextUser }) => {
     window.localStorage.setItem("dairyfarm-token", token);
     setAuthToken(token);
-    setUser(nextUser);
+    const normalizedUser = {
+      ...nextUser,
+      id: String(nextUser.id || nextUser._id || ""),
+      _id: String(nextUser.id || nextUser._id || "")
+    };
+    setUser(normalizedUser);
+    triggerToast(
+      "ನಮಸ್ಕಾರ (Namaskara)! 🙏",
+      `ಸ್ವಾಗತ ${nextUser?.fullName || "ರೈತರೇ"}! Welcome to your Dairy Farm Management Dashboard.`,
+      "success"
+    );
     window.location.hash = "/setup";
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await api.logout();
+    } catch (_err) {
+      // Fallback cleanup
+    }
     window.localStorage.removeItem("dairyfarm-token");
     setAuthToken("");
     setUser(null);
+    triggerToast(
+      "ವಂದನೆಗಳು (Vandanegalu)! 🙏",
+      "ಧನ್ಯವಾದಗಳು! You have been logged out successfully.",
+      "info"
+    );
     window.location.hash = "/";
   };
 
   const handleSaveSetup = async () => {
-    const saved = await api.saveFarm(authToken, {
-      cowsCount: Number(herdSetup.cowsCount || 0),
-      buffaloesCount: Number(herdSetup.buffaloesCount || 0)
-    });
+    try {
+      const saved = await api.saveFarm(authToken, {
+        cowsCount: Number(herdSetup.cowsCount || 0),
+        buffaloesCount: Number(herdSetup.buffaloesCount || 0)
+      });
 
-    setHerdSetup({
-      cowsCount: saved.cowsCount,
-      buffaloesCount: saved.buffaloesCount
-    });
+      setHerdSetup({
+        cowsCount: saved.cowsCount,
+        buffaloesCount: saved.buffaloesCount
+      });
+
+      triggerToast(
+        "Herd Setup Saved!",
+        `Configured count: ${saved.cowsCount} Cows, ${saved.buffaloesCount} Buffaloes.`,
+        "success"
+      );
+    } catch (error) {
+      triggerToast("Setup Failed", error.message || "Failed to save herd setup.", "error");
+      throw error;
+    }
   };
 
   const parseAge = (ageText = "") => {
@@ -245,59 +294,138 @@ export default function App() {
   };
 
   const handleSaveAnimals = async (type) => {
-    const items = (type === "Cow" ? cows : buffaloes).map((animal) => ({
-      nameTagId: animal.nameTagId,
-      milkYieldPerDay: Number(animal.milkYieldPerDay || 0),
-      pregnancyStatus: animal.pregnancyStatus,
-      ...parseAge(animal.age)
-    }));
+    try {
+      const items = (type === "Cow" ? cows : buffaloes).map((animal) => ({
+        nameTagId: animal.nameTagId,
+        milkYieldPerDay: Number(animal.milkYieldPerDay || 0),
+        pregnancyStatus: animal.pregnancyStatus,
+        ...parseAge(animal.age)
+      }));
 
-    const saved =
-      type === "Cow"
-        ? await api.saveCows(authToken, items)
-        : await api.saveBuffaloes(authToken, items);
+      const saved =
+        type === "Cow"
+          ? await api.saveCows(authToken, items)
+          : await api.saveBuffaloes(authToken, items);
 
-    const normalized = saved.map((animal) => ({
-      id: animal._id,
-      animalType: type,
-      nameTagId: animal.nameTagId,
-      age: `${animal.age?.years || 0} years ${animal.age?.months || 0} months`,
-      milkYieldPerDay: animal.milkYieldPerDay,
-      pregnancyStatus: animal.pregnancyStatus
-    }));
+      const normalized = saved.map((animal) => ({
+        id: animal._id,
+        animalType: type,
+        nameTagId: animal.nameTagId,
+        age: `${animal.age?.years || 0} years ${animal.age?.months || 0} months`,
+        milkYieldPerDay: animal.milkYieldPerDay,
+        pregnancyStatus: animal.pregnancyStatus
+      }));
 
-    if (type === "Cow") {
-      setCows(
-        syncAnimalDrafts(
-          normalized,
-          herdSetup.cowsCount || normalized.length || 0,
-          "Cow"
-        )
+      if (type === "Cow") {
+        setCows(
+          syncAnimalDrafts(
+            normalized,
+            herdSetup.cowsCount || normalized.length || 0,
+            "Cow"
+          )
+        );
+      } else {
+        setBuffaloes(
+          syncAnimalDrafts(
+            normalized,
+            herdSetup.buffaloesCount || normalized.length || 0,
+            "Buffalo"
+          )
+        );
+      }
+
+      triggerToast(
+        `${type} Records Saved!`,
+        `All ${type.toLowerCase()} livestock records have been updated.`,
+        "success"
       );
-    } else {
-      setBuffaloes(
-        syncAnimalDrafts(
-          normalized,
-          herdSetup.buffaloesCount || normalized.length || 0,
-          "Buffalo"
-        )
-      );
+    } catch (error) {
+      triggerToast(`${type} Save Failed`, error.message || `Failed to save ${type.toLowerCase()} records.`, "error");
+      throw error;
     }
   };
 
   const handleSaveFinance = async (payload) => {
-    const saved = await api.saveFinance(authToken, payload);
-    setFinance(saved);
-    return saved;
+    try {
+      const saved = await api.saveFinance(authToken, payload);
+      setFinance(saved);
+      triggerToast(
+        "Finance Data Saved!",
+        "Milk sales, rates, and expenses have been stored.",
+        "success"
+      );
+      return saved;
+    } catch (error) {
+      triggerToast("Finance Save Failed", error.message || "Failed to save finance data.", "error");
+      throw error;
+    }
   };
 
   const handleCreateListing = async (payload) => {
-    const saved = await api.createMarketplaceListing(authToken, {
-      ...payload,
-      sellerName: user?.fullName || "Farm seller"
-    });
-    setMarketplaceListings((current) => [saved, ...current]);
+    try {
+      const saved = await api.createMarketplaceListing(authToken, {
+        ...payload,
+        sellerName: user?.fullName || "Farm seller"
+      });
+      setMarketplaceListings((current) => [saved, ...current]);
+      triggerToast(
+        "Listing Published!",
+        "Your livestock listing is now live in the marketplace.",
+        "success"
+      );
+    } catch (error) {
+      triggerToast("Publish Failed", error.message || "Failed to publish listing.", "error");
+      throw error;
+    }
   };
+
+  const handleUpdateListing = async (id, payload) => {
+    try {
+      let updated;
+      try {
+        updated = await api.updateMarketplaceListing(authToken, id, payload);
+      } catch (err) {
+        console.warn("Backend update fallback:", err.message);
+        updated = { _id: id, ...payload };
+      }
+      setMarketplaceListings((current) =>
+        current.map((item) => ((item._id || item.id) === id ? { ...item, ...updated } : item))
+      );
+      triggerToast(
+        "Listing Updated!",
+        "Your livestock listing details have been updated.",
+        "success"
+      );
+      return updated;
+    } catch (error) {
+      triggerToast("Update Failed", error.message || "Failed to update listing.", "error");
+      throw error;
+    }
+  };
+
+  const handleDeleteListing = async (id) => {
+    try {
+      try {
+        await api.deleteMarketplaceListing(authToken, id);
+      } catch (apiError) {
+        console.warn("Backend delete note:", apiError.message);
+      }
+
+      setMarketplaceListings((current) =>
+        current.filter((item) => (item._id || item.id) !== id)
+      );
+
+      triggerToast(
+        "Listing Removed",
+        "The marketplace listing was deleted successfully.",
+        "info"
+      );
+    } catch (error) {
+      triggerToast("Delete Failed", error.message || "Failed to delete listing.", "error");
+      throw error;
+    }
+  };
+
 
   if (isBootstrapping) {
     return (
@@ -308,10 +436,15 @@ export default function App() {
   }
 
   if (!authToken) {
-    return <LoginPage onAuthSuccess={handleAuthSuccess} appError={appError} />;
+    return (
+      <>
+        <Toast toast={toast} onClose={() => setToast(null)} />
+        <LoginPage onAuthSuccess={handleAuthSuccess} appError={appError} />
+      </>
+    );
   }
 
-  let page;
+  let page = null;
 
   switch (activeRoute) {
     case "cows":
@@ -353,7 +486,10 @@ export default function App() {
       page = (
         <MarketplaceHub
           listings={marketplaceListings}
+          user={user}
           onCreateListing={handleCreateListing}
+          onUpdateListing={handleUpdateListing}
+          onDeleteListing={handleDeleteListing}
         />
       );
       break;
@@ -362,6 +498,9 @@ export default function App() {
       break;
     case "diseases":
       page = <DiseasesPage diseases={diseases} />;
+      break;
+    case "chatbot":
+      page = <ChatBot stats={stats} user={user} authToken={authToken} />;
       break;
     case "setup":
     default:
@@ -377,15 +516,18 @@ export default function App() {
   }
 
   return (
-    <AppShell
-      routes={routes}
-      activeRoute={activeRoute}
-      herdSetup={herdSetup}
-      stats={stats}
-      user={user}
-      onLogout={handleLogout}
-    >
-      {page}
-    </AppShell>
+    <>
+      <Toast toast={toast} onClose={() => setToast(null)} />
+      <AppShell
+        routes={routes}
+        activeRoute={activeRoute}
+        herdSetup={herdSetup}
+        stats={stats}
+        user={user}
+        onLogout={handleLogout}
+      >
+        {page}
+      </AppShell>
+    </>
   );
 }

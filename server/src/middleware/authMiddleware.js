@@ -2,9 +2,10 @@ import { verifyToken } from "../utils/jwt.js";
 
 export function requireAuth(request, response, next) {
   const authorization = request.headers.authorization || "";
-  const token = authorization.startsWith("Bearer ")
+  const headerToken = authorization.startsWith("Bearer ")
     ? authorization.slice(7)
     : null;
+  const token = request.cookies?.token || headerToken;
 
   if (!token) {
     return response.status(401).json({ message: "Authentication required." });

@@ -1,8 +1,12 @@
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "https://dairyfarm-sjvo.onrender.com/api";
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "http://localhost:8080/api"
+    : "https://dairyfarm-sjvo.onrender.com/api");
 
 async function request(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(options.token
@@ -37,6 +41,10 @@ export const api = {
     request("/auth/register", {
       method: "POST",
       body: JSON.stringify(payload)
+    }),
+  logout: () =>
+    request("/auth/logout", {
+      method: "POST"
     }),
   me: (token) => request("/auth/me", { token }),
   getFarm: (token) => request("/farm", { token }),
@@ -74,6 +82,24 @@ export const api = {
       token,
       body: JSON.stringify(payload)
     }),
+  updateMarketplaceListing: (token, id, payload) =>
+    request(`/marketplace/${id}`, {
+      method: "PUT",
+      token,
+      body: JSON.stringify(payload)
+    }),
+  deleteMarketplaceListing: (token, id) =>
+    request(`/marketplace/${id}`, {
+      method: "DELETE",
+      token
+    }),
   getEmergencyContacts: () => request("/content/emergency-contacts"),
-  getDiseases: () => request("/content/diseases")
+  getDiseases: () => request("/content/diseases"),
+  sendAiChat: (token, prompt, conversationHistory = []) =>
+    request("/content/chat", {
+      method: "POST",
+      token,
+      body: JSON.stringify({ prompt, conversationHistory })
+    })
 };
+

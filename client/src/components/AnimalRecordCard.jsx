@@ -7,21 +7,21 @@ export default function AnimalRecordCard({
 }) {
   return (
     <div className="sub-card">
-      <div className="mb-5 flex items-center justify-between">
+      <div className="mb-4 sm:mb-5 flex items-center justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-white/50">
+          <p className="text-[10px] sm:text-xs uppercase tracking-[0.22em] text-white/50">
             {animal.animalType} Record
           </p>
-          <h3 className="mt-2 font-display text-2xl text-white">
+          <h3 className="mt-1 font-display text-xl sm:text-2xl text-white">
             {animal.animalType} {index + 1}
           </h3>
         </div>
-        <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/70">
+        <span className="rounded-full border border-white/10 bg-white/10 px-2.5 py-1 text-[10px] sm:text-xs uppercase tracking-[0.18em] text-white/70">
           Live entry
         </span>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-3.5 sm:gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
         <FormField
           label="Name / Tag ID"
           value={animal.nameTagId}
@@ -59,3 +59,4 @@ export default function AnimalRecordCard({
     </div>
   );
 }
+
