@@ -5,7 +5,8 @@ import { diseaseSeed, districtEmergencySeed, emergencyPrioritySeed } from "../ut
 
 export async function ensureContentSeeded() {
   const diseaseCount = await Disease.countDocuments();
-  if (!diseaseCount) {
+  if (diseaseCount < diseaseSeed.length) {
+    await Disease.deleteMany({});
     await Disease.insertMany(diseaseSeed);
   }
 

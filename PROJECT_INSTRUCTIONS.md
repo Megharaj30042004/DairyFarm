@@ -14,16 +14,19 @@ Use it to understand:
 This is a full-stack Dairy Farm and Livestock Management web application.
 
 Core capabilities:
-- authentication with register/login
+- Luminous Sky & Ice Blue theme with unified single desktop sidebar & mobile drawer navigation
+- dual Email or Mobile Number authentication with automatic login on valid credentials
+- keyboard shortcuts (`Enter` to submit/confirm, `Escape` to close popups)
 - separate farm setup for cows and buffaloes
 - dynamic livestock record entry based on entered herd count
-- finance analytics based on entered milk yield
-- emergency veterinary directory
-- disease guide with Kannada names
-- public livestock marketplace with listing images
+- finance analytics with custom per-liter milk pricing
+- authentic 30-district emergency veterinary helpline directory
+- comprehensive 13-disease clinical directory (FMD, Mastitis, LSD, HS, BQ, Milk Fever, Brucellosis, Theileriosis, Protozoan blood parasites, Roundworms, Hookworms, Tapeworms, and Fascioliasis)
+- public livestock marketplace with local photo uploads
+- Pashu Mitra AI Assistant with 5 daily free prompts per user limit
 
 ## Tech Stack & Security
-- Frontend: React 18 + Vite + Tailwind CSS
+- Frontend: React 18 + Vite + Tailwind CSS (Luminous Sky & Ice Blue design system)
 - Backend: Node.js + Express + Helmet + Express-Rate-Limit + Cookie-Parser
 - Database: MongoDB with Mongoose ODM
 - Auth & Security: JWT with `HttpOnly` Cookies & bcryptjs password hashing (10 rounds)

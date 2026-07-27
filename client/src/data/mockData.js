@@ -188,6 +188,78 @@ export const diseaseGuide = [
       "Chronic bacterial infection causes herd infertility and is zoonotic (can transmit to humans via raw milk).",
     recovery:
       "Safely dispose of aborted fetus and placenta with lime. Disinfect calving area thoroughly. Test herd regularly and vaccinate female calves aged 4-8 months with Brucella Cotton Strain 19 vaccine."
+  },
+  {
+    id: "theileriosis",
+    name: "ಥೈಲೇರಿಯಾಸಿಸ್ / ಜ್ವರ ರಕ್ತದ ಪರೋಪಜೀವಿ (Theileriosis)",
+    category: "Protozoan",
+    imageUrl: "/images/diseases/hs.jpg",
+    symptoms:
+      "Continuous high fever (104-106°F), severe swelling of prescapular lymph nodes, pale or yellowish eye membranes (anemia & jaundice), rapid emaciation, and drop in milk production.",
+    medicalIssues:
+      "Theileria protozoan parasite destroys red blood cells and white lymph cells, leading to acute blood loss, pulmonary edema, liver damage, and high calf mortality. Transmitted by Hyalomma tick bites.",
+    recovery:
+      "Administer Buparvaquone (5 mg/kg body weight) along with blood tonic injections under vet supervision. Control tick vectors using Cypermethrin / Amitraz sprays on cattle and shed crevices regularly."
+  },
+  {
+    id: "protozoan",
+    name: "ಪ್ರೊಟೊಜೋವನ್ ರಕ್ತದ ಪರಾವಲಂಬಿ / ಬ್ಯಾಬೆಸಿಯಾಸಿಸ್ (Protozoan / Babesiosis)",
+    category: "Protozoan",
+    imageUrl: "/images/diseases/bq.jpg",
+    symptoms:
+      "High fever, dark coffee-colored urine (Redwater / Hemoglobinuria), severe anemia, muscle shivering, constipation followed by foul diarrhea, and weakness.",
+    medicalIssues:
+      "Babesia blood parasites multiply inside red blood cells causing massive intravascular hemolysis, hemoglobinuria, kidney congestion, jaundice, and fatal collapse.",
+    recovery:
+      "Immediate veterinary administration of Diminazene Aceturate (Berenil) or Imidocarb Dipropionate. Provide supportive fluids, iron tonics, and eliminate tick vectors from pastures and animal housing."
+  },
+  {
+    id: "roundworms",
+    name: "ಉರುಳೆ ಹುಳುಗಳ ಸೋಂಕು (Roundworm Infection - Toxocariasis)",
+    category: "Parasitic",
+    imageUrl: "/images/diseases/lsd.jpg",
+    symptoms:
+      "Pot-bellied abdomen in calves, dull rough hair coat, persistent foul diarrhea or constipation, stunted growth, poor feed conversion, and weight loss.",
+    medicalIssues:
+      "Roundworms (Toxocara vitulorum) absorb essential nutrients from the small intestine, cause intestinal irritation, colic, blockages, and severe calf mortality.",
+    recovery:
+      "Deworm calves at 10-14 days of age using Albendazole or Fenbendazole syrup. Repeat deworming monthly up to 6 months of age. Keep calf pens clean, dry, and free of fecal buildup."
+  },
+  {
+    id: "hookworms",
+    name: "ಕೊಕ್ಕೆ ಹುಳುಗಳ ಸೋಂಕು (Hookworm Infection - Bunostomiasis)",
+    category: "Parasitic",
+    imageUrl: "/images/diseases/fmd.jpg",
+    symptoms:
+      "Severe anemia, pale gums and eyelid conjunctiva, soft fluid swelling under the jaw (Bottle Jaw), chronic weight loss, dark bloody diarrhea, and weakness.",
+    medicalIssues:
+      "Adult hookworms (Bunostomum phlebotomum) attach to intestinal walls and actively suck blood, causing severe iron-deficiency anemia, hypoproteinemia, and extreme weakness.",
+    recovery:
+      "Administer broad-spectrum anthelmintics such as Ivermectin injection, Levamisole, or Fenbendazole. Provide iron supplements and keep calf bedding clean, dry, and well-drained."
+  },
+  {
+    id: "tapeworms",
+    name: "ಪಟ್ಟಿ ಹುಳುಗಳ ಸೋಂಕು (Tapeworm Infection - Monieziosis)",
+    category: "Parasitic",
+    imageUrl: "/images/diseases/mastitis.jpg",
+    symptoms:
+      "White rice-grain-like segments visible in manure, abdominal bloating, digestive disturbances, variable appetite, dull coat, and poor weight gain in young stock.",
+    medicalIssues:
+      "Moniezia tapeworms grow up to several meters in the small intestine, competing for vital nutrients, causing gut irritation, digestive cramps, and stunting.",
+    recovery:
+      "Deworm with Niclosamide, Praziquantel, or Fenbendazole under vet guidance. Practice rotational grazing and control soil pasture mites (oribatid intermediate hosts)."
+  },
+  {
+    id: "fascioliasis",
+    name: "ಲಿವರ್ ಫ್ಲೂಕ್ / ಡಿಸ್ಟೋಮಿಯಾಸಿಸ್ (Fascioliasis / Liver Fluke)",
+    category: "Parasitic",
+    imageUrl: "/images/diseases/milkfever.jpg",
+    symptoms:
+      "Soft bottle-jaw swelling under the lower jaw (ಅಡಿಬಾವು), chronic weakness, progressive weight loss, yellowish eyes/gums (jaundice), diarrhea, and low milk production.",
+    medicalIssues:
+      "Fasciola hepatica flukes migrate through liver tissue causing severe liver fibrosis, bile duct obstruction, hypoproteinemia, anemia, and liver failure. Transmitted by freshwater Lymnaea snails.",
+    recovery:
+      "Treat affected animals with Oxyclozanide, Triclabendazole, or Nitroxynil flukicides. Keep cattle away from swampy/waterlogged pastures where snails breed, and treat water bodies with copper sulfate."
   }
 ];
 

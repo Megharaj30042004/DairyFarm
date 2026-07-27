@@ -12,54 +12,112 @@ html {
 }
 
 body {
-  @apply m-0 min-h-screen bg-ink font-sans text-white antialiased selection:bg-ambermilk selection:text-ink;
+  @apply m-0 min-h-screen bg-ink font-sans text-slate-100 antialiased selection:bg-sky-500 selection:text-white;
   background-image:
-    radial-gradient(circle at top, rgba(234, 198, 117, 0.12), transparent 22%),
-    linear-gradient(180deg, #08111f 0%, #0f1d24 100%);
+    radial-gradient(circle at 20% 15%, rgba(56, 189, 248, 0.25), transparent 50%),
+    radial-gradient(circle at 80% 75%, rgba(14, 165, 233, 0.22), transparent 45%),
+    radial-gradient(circle at 50% 40%, rgba(125, 211, 252, 0.15), transparent 60%),
+    linear-gradient(180deg, #0b1528 0%, #14243b 50%, #0e1c31 100%);
+  background-attachment: fixed;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Luminous Glassmorphism Lighter Blue Panels */
 .glass-panel {
-  @apply border border-white/15 bg-white/10 shadow-glass backdrop-blur-2xl;
+  @apply border border-sky-400/25 bg-slate-800/60 shadow-glass backdrop-blur-2xl transition-all duration-300 relative overflow-hidden;
+}
+
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.45), transparent);
+  pointer-events: none;
+}
+
+.glass-panel-hover {
+  @apply glass-panel;
+}
+.glass-panel-hover:hover {
+  @apply border-sky-400/50 bg-slate-800/80 -translate-y-0.5;
+  box-shadow: 0 20px 45px -10px rgba(56, 189, 248, 0.35);
 }
 
 .section-shell {
-  @apply glass-panel rounded-[1.5rem] p-4 sm:rounded-[2rem] sm:p-6 md:p-8;
+  @apply glass-panel rounded-[1.75rem] p-5 sm:rounded-[2.25rem] sm:p-7 md:p-9 border-sky-400/25;
 }
 
-/* 16px text-base on mobile prevents iOS Safari auto-zoom on input focus */
+/* Lighter Sky Inputs */
 .field {
-  @apply min-h-[48px] w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-base text-white placeholder:text-white/50 outline-none transition focus:border-ambermilk/70 focus:bg-white/15 sm:text-sm;
+  @apply min-h-[50px] w-full rounded-2xl border border-sky-400/30 bg-slate-900/70 px-4 py-3.5 text-base text-white placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-sky-400 focus:bg-slate-900/90 focus:ring-2 focus:ring-sky-400/30 sm:text-sm;
 }
 
 .field-label {
-  @apply mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-white/70;
+  @apply mb-2 flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-[0.2em] text-sky-400;
 }
 
+/* Luminous Primary Buttons */
 .primary-button {
-  @apply inline-flex min-h-[48px] items-center justify-center rounded-2xl bg-ambermilk px-5 py-3 text-sm font-bold text-ink transition active:scale-[0.98] hover:brightness-105 disabled:opacity-50;
+  @apply inline-flex min-h-[50px] items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-extrabold text-slate-950 transition-all duration-300 active:scale-[0.97] hover:brightness-110 disabled:opacity-50 tracking-wide shadow-lg cursor-pointer;
+  background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 50%, #93c5fd 100%);
+}
+.primary-button:hover {
+  box-shadow: 0 0 35px rgba(56, 189, 248, 0.55);
+}
+
+.meadow-button {
+  @apply inline-flex min-h-[50px] items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-extrabold text-slate-950 transition-all duration-300 active:scale-[0.97] hover:brightness-110 disabled:opacity-50 tracking-wide shadow-lg cursor-pointer;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+.meadow-button:hover {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
 }
 
 .ghost-button {
-  @apply inline-flex min-h-[48px] items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition active:scale-[0.98] hover:bg-white/15 disabled:opacity-50;
+  @apply inline-flex min-h-[50px] items-center justify-center gap-2 rounded-2xl border border-sky-400/35 bg-sky-950/30 px-6 py-3.5 text-sm font-bold text-slate-100 transition-all duration-300 active:scale-[0.97] hover:border-sky-300/60 hover:bg-sky-900/40 hover:text-white disabled:opacity-50 cursor-pointer;
 }
 
 .page-title {
-  @apply font-display text-2xl text-white sm:text-3xl md:text-5xl;
+  @apply font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl leading-tight;
+}
+
+.gradient-title {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-sky-100 to-blue-200;
 }
 
 .page-copy {
-  @apply max-w-2xl text-xs leading-6 text-white/70 sm:text-sm sm:leading-7 md:text-base;
+  @apply max-w-3xl text-sm leading-relaxed text-slate-200/90 sm:text-base sm:leading-7;
 }
 
 .sub-card {
-  @apply rounded-[1.25rem] border border-white/10 bg-white/5 p-4 sm:rounded-[1.75rem] sm:p-5;
+  @apply rounded-[1.5rem] border border-sky-400/25 bg-slate-800/60 p-5 transition-all duration-300 backdrop-blur-md relative overflow-hidden;
+}
+.sub-card:hover {
+  @apply border-sky-400/45 bg-slate-800/80;
 }
 
-/* Hide scrollbar for smooth mobile horizontal nav scrolling */
+/* Custom Lighter Sky Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(11, 21, 40, 0.9);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.8);
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -67,4 +125,6 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+
 

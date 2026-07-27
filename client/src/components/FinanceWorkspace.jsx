@@ -283,75 +283,87 @@ export default function FinanceWorkspace({
           />
         </div>
 
-        <div className="sub-card bg-gradient-to-br from-ambermilk/20 to-white/5">
-          <p className="text-xs uppercase tracking-[0.26em] text-ambermilk font-semibold">
-            Financial Summary
-          </p>
-          <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
-            <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+        <div className="sub-card bg-gradient-to-br from-slate-900/90 via-slate-950 to-emerald-950/30 border-ambermilk/30 shadow-2xl">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <p className="text-xs uppercase tracking-[0.26em] text-ambermilk font-extrabold flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-ambermilk animate-ping" />
+              Financial Summary
+            </p>
+            <span className="px-2.5 py-0.5 text-[10px] font-extrabold rounded-full bg-ambermilk/20 text-ambermilk border border-ambermilk/30">
+              Real-time Net
+            </span>
+          </div>
+
+          <div className="mt-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
-                <span className="text-xs sm:text-sm text-white/70 block">Dairy Sales</span>
-                <span className="text-[10px] text-white/50">
-                  ₹{summary.dairyRate}/L × {Number(form.milkToDairyLiters || 0)} L
+                <span className="text-xs sm:text-sm text-slate-300 font-semibold block">Dairy Milk Sales</span>
+                <span className="text-[11px] text-slate-400">
+                  ₹{summary.dairyRate}/L × {Number(form.milkToDairyLiters || 0).toLocaleString("en-IN")} L
                 </span>
               </div>
-              <strong className="text-sm sm:text-base text-white">
+              <strong className="text-sm sm:text-base font-extrabold text-white">
                 ₹{summary.dairyRevenue.toLocaleString("en-IN")}
               </strong>
             </div>
 
-            <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
-                <span className="text-xs sm:text-sm text-white/70 block">Household Sales</span>
-                <span className="text-[10px] text-white/50">
-                  ₹{summary.householdRate}/L × {Number(form.milkToHouseholdsLiters || 0)} L
+                <span className="text-xs sm:text-sm text-slate-300 font-semibold block">Household Direct Sales</span>
+                <span className="text-[11px] text-slate-400">
+                  ₹{summary.householdRate}/L × {Number(form.milkToHouseholdsLiters || 0).toLocaleString("en-IN")} L
                 </span>
               </div>
-              <strong className="text-sm sm:text-base text-white">
+              <strong className="text-sm sm:text-base font-extrabold text-white">
                 ₹{summary.householdRevenue.toLocaleString("en-IN")}
               </strong>
             </div>
 
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <span className="text-xs sm:text-sm text-white/80 font-semibold">Gross Revenue</span>
-              <strong className="text-lg sm:text-2xl text-white">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3 bg-white/[0.03] p-3 rounded-xl">
+              <span className="text-xs sm:text-sm text-slate-200 font-extrabold">Gross Revenue</span>
+              <strong className="text-lg sm:text-2xl font-extrabold text-ambermilk">
                 ₹{summary.grossRevenue.toLocaleString("en-IN")}
               </strong>
             </div>
 
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <span className="text-xs sm:text-sm text-white/60">Total Expenses</span>
-              <strong className="text-lg sm:text-2xl text-white">
-                ₹{summary.totalExpenses.toLocaleString("en-IN")}
+            <div className="flex items-center justify-between border-b border-white/10 pb-3 bg-red-500/10 p-3 rounded-xl border border-red-500/20">
+              <span className="text-xs sm:text-sm text-red-300 font-extrabold">Total Farm Expenses</span>
+              <strong className="text-lg sm:text-2xl font-extrabold text-red-400">
+                - ₹{summary.totalExpenses.toLocaleString("en-IN")}
               </strong>
             </div>
 
-            <div className="flex items-center justify-between pt-1">
-              <span className="text-xs sm:text-sm text-white/90 font-bold">Net Income</span>
-              <strong className="text-xl sm:text-3xl text-meadow">
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-emerald-500/20 via-emerald-500/10 to-transparent border border-emerald-500/30 shadow-emerald-glow">
+              <div>
+                <span className="text-xs uppercase tracking-[0.2em] text-emerald-400 font-extrabold block">
+                  Estimated Net Income
+                </span>
+                <span className="text-[10px] text-slate-400">Monthly Profit After Costs</span>
+              </div>
+              <strong className="text-2xl sm:text-4xl font-extrabold text-emerald-300 tracking-tight">
                 ₹{summary.netIncome.toLocaleString("en-IN")}
               </strong>
             </div>
           </div>
 
-          <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4">
+          <div className="mt-8 space-y-4 pt-4 border-t border-white/10">
             <ChartBar
-              label="Projected Monthly Milk"
+              label="Projected Monthly Milk Production"
               value={analytics.totalMonthly}
               maxValue={Math.max(analytics.totalMonthly, analytics.soldMonthly, 1)}
-              colorClass="bg-white"
+              colorClass="bg-gradient-to-r from-sky-400 to-blue-500"
             />
             <ChartBar
-              label="Milk Sold"
+              label="Milk Volume Sold"
               value={analytics.soldMonthly}
               maxValue={Math.max(analytics.totalMonthly, analytics.soldMonthly, 1)}
-              colorClass="bg-ambermilk"
+              colorClass="bg-gradient-to-r from-ambermilk to-amber-400"
             />
             <ChartBar
-              label="Unsold Potential"
+              label="Unsold Capacity Margin"
               value={analytics.unsoldMonthly}
               maxValue={Math.max(analytics.totalMonthly, analytics.soldMonthly, 1)}
-              colorClass="bg-alert"
+              colorClass="bg-gradient-to-r from-red-500 to-rose-600"
             />
           </div>
         </div>
